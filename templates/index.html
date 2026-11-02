@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>训练数据质检 · dataset-doctor</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page">
+  <header class="hero">
+    <h1>训练数据质检</h1>
+    <p>上传一份包含 <code>text</code>、<code>label</code> 两列的 CSV，自动检测重复样本、空文本、超短文本、标签冲突与类别不平衡，并给出可下载的清洗结果。</p>
+  </header>
+
+  <section class="upload-card">
+    <input type="file" id="fileInput" accept=".csv" hidden>
+    <label for="fileInput" id="dropzone" class="dropzone">
+      <span class="dz-title" id="dzTitle">点击选择 CSV 文件</span>
+      <span class="dz-sub">也可以把文件拖到这里 · 最大 10 MB</span>
+    </label>
+    <div class="sample-hint">
+      没有数据？<a href="/static/sample_dirty.csv" download>下载示例脏数据</a>，共 541 条，含五类典型问题。
+    </div>
+  </section>
+
+  <section id="result" class="result" hidden>
+    <div class="score-card">
+      <div class="score-ring" id="scoreRing">
+        <span id="scoreValue">--</span>
+      </div>
+      <div class="score-meta">
+        <div class="score-level" id="scoreLevel">--</div>
+        <div class="score-desc">数据质量得分，满分 100</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-num" id="statTotal">0</span><span class="stat-label">总行数</span></div>
+      <div class="stat"><span class="stat-num warn" id="statProblem">0</span><span class="stat-label">问题行</span></div>
+      <div class="stat"><span class="stat-num ok" id="statClean">0</span><span class="stat-label">干净行</span></div>
+      <div class="stat"><span class="stat-num" id="statClasses">0</span><span class="stat-label">类别数</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>问题清单</h2>
+      <ul class="issue-list" id="issueList"></ul>
+    </div>
+
+    <div class="panel">
+      <h2>标签分布</h2>
+      <div class="bars" id="labelBars"></div>
+      <p class="imbalance-note" id="imbalanceNote" hidden>类别分布严重不平衡，建议补充少数类样本，否则模型会偏向多数类。</p>
+    </div>
+
+    <div class="actions">
+      <button id="downloadBtn" class="btn primary">下载清洗后的数据</button>
+      <button id="resetBtn" class="btn ghost">换一个文件</button>
+    </div>
+  </section>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
